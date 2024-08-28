@@ -65,7 +65,7 @@ const Form: React.FC = () => {
         });
 
         try {
-            await axios.post('api/forms', data, {
+            await axios.post('http://localhost:3001/api/forms', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
