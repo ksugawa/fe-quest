@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+import * as XLSX from 'xlsx';
 
 interface FormData {
     q_content: string;
@@ -64,18 +64,16 @@ const Form: React.FC = () => {
             data.append(`option_${index + 1}`, option);
         });
 
-        try {
-            await axios.post('http://localhost:3001/api/forms', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            alert('問題の登録が完了しました。');
-        } catch (err) {
-            console.error(err);
-            alert('問題の登録に失敗しました。');
-        }
+        setXlsx(formData);
     };
+
+    const setXlsx = (data: FormData) => {
+        const ws = XLSX.utils.json_to_sheet([data]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+        XLSX.writeFile(wb, "formData.xlsx");
+    }
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center">
